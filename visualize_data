@@ -1,0 +1,29 @@
+"""
+Created on Sat Mar 14 23:58:25 2020
+
+@author: yusheng
+"""
+import sys
+sys.path.append('/Users/yusheng/Downloads/bengaliai-cv19/')
+import torch
+import matplotlib.pyplot as plt
+from create_dataset_class import BangaliDatasetTrain
+import numpy as np
+
+
+dataset = BangaliDatasetTrain(folds=[0,1,2,3], img_height=137, img_width=236, 
+                              mean=(0.485,0.456,0.406),
+                              std=(0.229,0.224,0.225))
+
+
+
+
+idx = 6
+img = dataset[idx]['image']
+print(dataset[idx]['grapheme_root']) 
+print(dataset[idx]['vowel_diacritic'])
+print(dataset[idx]['consonant_diacritic'])
+npimg = img.numpy()
+plt.imshow(np.transpose(npimg,(1,2,0)))
+
+ 
