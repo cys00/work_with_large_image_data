@@ -1,0 +1,45 @@
+"""
+Created on Mon Mar  9 17:34:19 2020
+
+@author: yusheng
+"""
+
+import pandas as pd
+import joblib
+import glob
+from tqdm import tqdm
+
+'''
+df = pd.read_parquet('/Users/yusheng/Downloads/bengaliai-cv19/train_image_data_0.parquet')
+to read parquet file you need to pip install pyarrow
+df.head()
+
+always check the image size, 
+make sure height * width == number of colomns
+
+creat image pickle files instead of read in pandas
+as pickles reads faster
+'''
+
+l = glob.glob('/Users/yusheng/Downloads/bengaliai-cv19/train_image_data_*.parquet')
+print(l)
+
+'''
+always use iloc to slice pandas 
+df.iloc[i, :] works
+but not df[i, :]
+unless you convert pd to np array like below
+'''
+for f in l:
+    df = pd.read_parquet(f)
+    img_id = df.image_id.values
+    df = df.drop('image_id',axis=1)
+    df_array = df.values 
+    for i, j in tqdm(enumerate(img_id), total=len(img_id)):
+        joblib.dump(df_array[i, :], f'/Users/yusheng/Downloads/bengaliai-cv19/pickles/{j}.plk')
+
+'''
+multilabel classification:
+    1,create multi models to classify each label;
+    2,or create a single model to classify all labels(easier)
+'''
